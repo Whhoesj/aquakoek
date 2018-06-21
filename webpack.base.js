@@ -42,12 +42,12 @@ module.exports = {
             skipWaiting: true
         }),
         new WebpackPwaManifest({
-            short_name: "",
-            name: "",
-            start_url: ".",
+            short_name: "AquaKoek",
+            name: "Aqua Koek",
+            start_url: "https://koek.habets.io/index.html",
             display: "standalone",
-            theme_color: "#343a40",
-            background_color: "#ffffff",
+            theme_color: "#359b8b",
+            background_color: "#2f8c84",
             icons: [
                 {
                     src: path.resolve('src/assets/icon.png'),

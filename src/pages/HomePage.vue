@@ -3,9 +3,8 @@
         <div class="col">
             <div class="row">
                 <div class="col-2">
-                    <h4>User</h4>
                     <ul class="list-group">
-                        <li v-for="user in users"
+                        <li @click="openUser(user['.key'])" v-for="user in users"
                             class="list-group-item d-flex justify-content-between align-items-center">
                             {{user.name}}
                             <span class="badge badge-primary badge-pill">{{user.consumptions.length}}</span>
@@ -16,10 +15,7 @@
 
                 </div>
                 <div class="col">
-                    <h4>Koeken</h4>
-                    <div class="row">
-                        <card v-for="koek in koeken" :koek="koek" class="col-auto"></card>
-                    </div>
+                    <koek-grid></koek-grid>
                 </div>
             </div>
         </div>
@@ -28,15 +24,21 @@
 
 <script>
     import {db} from '../firebase/index.js';
-    import Card from "../components/Card.vue";
+    import KoekGrid from "../components/KoekGrid.vue";
 
     export default {
         name: "home-page",
-        components: {Card},
+        components: {KoekGrid},
         firestore() {
             return {
                 users: db.collection('users'),
                 koeken: db.collection('koeken'),
+            }
+        },
+        methods: {
+            openUser(id) {
+                console.log(`Going to user ${id}`);
+                this.$router.push({name: 'user', params: {userId: id}})
             }
         }
     }
