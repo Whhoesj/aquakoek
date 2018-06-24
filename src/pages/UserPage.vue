@@ -3,7 +3,7 @@
         <div class="col-md-2">
             <button @click="goBack()" type="button" class="btn btn-secondary btn-lg btn-block mb-3">Back</button>
             <div class="card mb-2">
-                <img class="card-img-top" :src="user.thumbnail">
+                <img class="card-img-top img-fluid user-image" :src="user.image">
                 <div class="card-body">
                     <h5 class="card-title">{{user.name}}</h5>
                 </div>
@@ -55,5 +55,8 @@
 </script>
 
 <style scoped>
-
+    .user-image {
+        max-width: 100%;
+        height: auto;
+    }
 </style>

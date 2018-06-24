@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
-const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 
@@ -37,10 +36,6 @@ module.exports = {
             inject: true
         }),
         new VueLoaderPlugin(),
-        new WorkboxPlugin.GenerateSW({
-            clientsClaim: true,
-            skipWaiting: true
-        }),
         new WebpackPwaManifest({
             short_name: "AquaKoek",
             name: "Aqua Koek",
