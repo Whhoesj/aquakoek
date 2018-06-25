@@ -226,6 +226,10 @@
 </script>
 
 <style scoped>
+    img {
+        pointer-events: none;
+    }
+
     .user-list {
         height: 20%;
     }
