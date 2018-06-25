@@ -1,91 +1,99 @@
 <template>
-    <div class="row">
-        <div class="col-3 user-list">
-            <div class="d-flex flex-wrap">
-                <div @click="selectUser(user)" v-for="(user, idx) in users" :key="idx"
-                     class="p-2 card mb-3 mr-3 user-card" :class="{'bg-primary': selectedUserKey === user.id}">
-                    <img class="card-img-top user-image" :src="user.image">
+    <div>
+        <div class="row user-list">
+            <div class="col">
+                <div class="d-flex flex-row">
+                    <div class="card p-2 mb-3 mr-3 user-card" @click="selectUser(user)" v-for="(user, idx) in users"
+                         :key="idx" :class="{'bg-primary': selectedUserKey === user.id}">
+                        <img class="card-img-top user-image" :src="user.image">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="row">
-                <div @click="selectKoek(koek)" v-for="(koek, idx) in koeken" :key="idx" class="col-sm-2 card mb-3 mr-4"
-                     :class="{'bg-primary': selectedKoekKey === koek.id}">
-                    <img class="card-img-top img-fluid" :src="koek.thumbnail">
+        <div class="row mt-5 ml-2">
+            <div class="col">
+                <div class="d-flex align-content-start flex-wrap">
+                    <div class="p-2 card mb-3 mr-4 koek-card" @click="selectKoek(koek)" v-for="(koek, idx) in koeken"
+                         :key="idx"
+                         :class="{'bg-primary': selectedKoekKey === koek.id}">
+                        <img class="card-img-top img-fluid" :src="koek.thumbnail">
+                        <div class="card-body">
+                            <h5 class="card-title koek-name">{{koek.name}}</h5>
+                            <p class="card-text">{{koek.description}}</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Prijs: €{{koek.price.toFixed(2)}}<br/>
+                                    Calorieën: {{koek.calories}}
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-3">
+                <button v-if="selectedUser !== null || selectedKoek !== null" @click="cancelAll()" type="button"
+                        class="btn btn-danger btn-block mb-4">Annuleren
+                </button>
+                <div @click="test()" v-if="selectedUser === null || selectedKoek === null"
+                     class="card text-center mb-3">
                     <div class="card-body">
-                        <h5 class="card-title koek-name">{{koek.name}}</h5>
-                        <p class="card-text">{{koek.description}}</p>
+                        <h4 v-if="selectedUser === null" class="card-title">Tik op je foto</h4>
+                        <h4 v-if="selectedUser !== null" class="card-title">Tik op een koek</h4>
+                    </div>
+                </div>
+                <div v-if="selectedUser !== null && selectedKoek !== null"
+                     class="card text-center mb-3 consumption-card">
+                    <div class="card-body">
+                        <p class="card-text">Een</p>
+                        <h5 class="card-title"><strong>{{selectedKoekName}}</strong></h5>
+                        <p class="card-text">voor</p>
+                        <h5 class="card-title mb-3"><strong>{{selectedUserName}}</strong></h5>
+                        <button v-if="consumeState === STATE_IDLE" @click="consumeKoek()"
+                                type="button" class="btn btn-primary btn-block btn-lg">Eet
+                            koek
+                        </button>
+                        <div v-if="consumeState === STATE_BUSY" class="alert alert-info align-content-center"
+                             role="alert">
+                            Opslaan...
+                        </div>
+                        <div v-if="consumeState === STATE_SUCCESS" class="alert alert-success align-content-center"
+                             role="alert">Opgeslagen
+                        </div>
+                        <div v-if="consumeState === STATE_FAILED" class="alert alert-danger align-content-center"
+                             role="alert">Er ging iets fout
+                        </div>
+                    </div>
+                </div>
+                <div v-if="selectedUser !== null" class="card mb-3 user-details-card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{selectedUserName}}</h4>
                         <p class="card-text">
-                            <small class="text-muted">
-                                Prijs: €{{koek.price}}<br/>
-                                Calorieën: {{koek.calories}} kcal
-                            </small>
+                            Gegeten koeken: {{consumptions.length}}
+                            <!--Totaal calorieën: {{totalCalories}} kcal-->
                         </p>
                     </div>
+                    <ul class="list-group list-group-flush">
+                        <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
+                            {{c.koekName}}
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-        <div class="col-2">
-            <button v-if="selectedUser !== null || selectedKoek !== null" @click="cancelAll()" type="button"
-                    class="btn btn-danger btn-block mb-4">Annuleren
-            </button>
-            <div @click="test()" v-if="selectedUser === null || selectedKoek === null" class="card text-center mb-3">
-                <div class="card-body">
-                    <h4 v-if="selectedUser === null" class="card-title">Tik op je foto</h4>
-                    <h4 v-if="selectedUser !== null" class="card-title">Tik op een koek</h4>
-                </div>
-            </div>
-            <div v-if="selectedUser !== null && selectedKoek !== null"
-                 class="card text-center mb-3 consumption-card">
-                <div class="card-body">
-                    <p class="card-text">Een</p>
-                    <h5 class="card-title"><strong>{{selectedKoekName}}</strong></h5>
-                    <p class="card-text">voor</p>
-                    <h5 class="card-title mb-3"><strong>{{selectedUserName}}</strong></h5>
-                    <button v-if="consumeState === STATE_IDLE" @click="consumeKoek()"
-                            type="button" class="btn btn-primary btn-block btn-lg">Eet
-                        koek
-                    </button>
-                    <div v-if="consumeState === STATE_BUSY" class="alert alert-info align-content-center" role="alert">
-                        Opslaan...
-                    </div>
-                    <div v-if="consumeState === STATE_SUCCESS" class="alert alert-success align-content-center"
-                         role="alert">Opgeslagen
-                    </div>
-                    <div v-if="consumeState === STATE_FAILED" class="alert alert-danger align-content-center"
-                         role="alert">Er ging iets fout
-                    </div>
-                </div>
-            </div>
-            <div v-if="selectedUser !== null" class="card mb-3 user-details-card">
-                <div class="card-body">
-                    <h4 class="card-title">{{selectedUserName}}</h4>
-                    <p class="card-text">
-                        Gegeten koeken: {{consumptions.length}}
+                <div v-if="selectedUser === null" class="card mb-3">
+                    <div class="card-body">
+                        <!--<h4 class="card-title">Statistieken</h4>-->
+                        <!--<p class="card-text">-->
+                        <!--Totaal gegeten: {{totalConsumptions}}-->
                         <!--Totaal calorieën: {{totalCalories}} kcal-->
-                    </p>
+                        <!--</p>-->
+                        <h4 class="card-title">Recent gegeten</h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
+                            {{c.userName}}, {{c.koekName}}
+                        </li>
+                    </ul>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                        {{c.koekName}}
-                    </li>
-                </ul>
-            </div>
-            <div v-if="selectedUser === null" class="card mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">Statistieken</h4>
-                    <p class="card-text">
-                        Totaal gegeten: {{totalConsumptions}}
-                        <!--Totaal calorieën: {{totalCalories}} kcal-->
-                    </p>
-                    <h4 class="card-title">Recent gegeten</h4>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                        {{c.userName}}, {{c.koekName}}
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -208,7 +216,7 @@
 
 <style scoped>
     .user-list {
-        max-height: 100vh;
+        height: 20%;
     }
 
     .user-card {
@@ -223,5 +231,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .koek-card {
+        width: 11em;
     }
 </style>
