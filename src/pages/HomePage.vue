@@ -131,6 +131,7 @@
                 STATE_BUSY: 'busy',
                 STATE_SUCCESS: 'success',
                 STATE_FAILED: 'failed',
+                timerHandle: -1,
             }
         },
         computed: {
@@ -164,12 +165,14 @@
                         .where('userId', '==', user.id)
                         .where('paid', '==', false)
                         .orderBy('date', 'desc')
-                )
+                );
+                this.setTimer();
             },
             selectKoek(koek) {
                 console.log(`Selecting koek ${koek.id}`);
                 this.selectedKoek = koek;
                 this.consumeState = STATE_IDLE;
+                this.setTimer();
             },
             cancelAll() {
                 this.selectedKoek = null;
@@ -204,12 +207,20 @@
                     .then(ref => {
                         console.log("Consumption written");
                         this.consumeState = STATE_SUCCESS;
+                        this.setTimer(true);
                     })
                     .catch(error => {
                         console.error("Failed to store consumption");
                         this.consumeState = STATE_FAILED;
+                        this.setTimer();
                     });
             },
+            setTimer(short) {
+                window.clearTimeout(this.timerHandle);
+                this.timerHandle = window.setTimeout(() => {
+                    this.cancelAll();
+                }, (short === true) ? 3000 : 10000);
+            }
         }
     }
 </script>
