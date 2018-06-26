@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-5 ml-2">
+        <div class="row mt-3 ml-2">
             <div class="col">
                 <div class="d-flex align-content-start flex-wrap">
                     <div class="p-2 card mb-3 mr-4 koek-card" @click="selectKoek(koek)" v-for="(koek, idx) in koeken"
@@ -70,29 +70,50 @@
                         <h4 class="card-title">{{selectedUserName}}</h4>
                         <p class="card-text">
                             Gegeten koeken: {{consumptions.length}}
-                            <!--Totaal calorieën: {{totalCalories}} kcal-->
                         </p>
+                        <h5>Recent gegeten door {{selectedUserName}}</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                            <tr v-for="(c, idx) in consumptions" :key="idx">
+                                <td>{{generateDate(c.date)}}</td>
+                                <td>{{c.koekName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                            {{c.koekName}}, {{generateDate(c.date)}}
-                        </li>
-                    </ul>
                 </div>
                 <div v-if="selectedUser === null" class="card mb-3">
                     <div class="card-body">
-                        <!--<h4 class="card-title">Statistieken</h4>-->
-                        <!--<p class="card-text">-->
-                        <!--Totaal gegeten: {{totalConsumptions}}-->
-                        <!--Totaal calorieën: {{totalCalories}} kcal-->
-                        <!--</p>-->
-                        <h4 class="card-title">Recent gegeten</h4>
+                        <h4 class="card-title">Statistieken</h4>
+                        <p class="card-text">
+                            Totaal gegeten: {{totalConsumptions}}<br/>
+                            Totaal calorieën: {{totalCalories}} kcal
+                        </p>
+                        <div v-if="showRecent">
+                            <h4 class="card-title">Recent gegeten</h4>
+                            <table class="table table-sm">
+                                <tbody>
+                                <tr v-for="(c, idx) in consumptions" :key="idx">
+                                    <td>{{generateDate(c.date)}}</td>
+                                    <td>{{c.userName}}</td>
+                                    <td>{{c.koekName}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div v-else>
+                            <h4 class="card-title">Meest gegeten</h4>
+                            <table class="table table-sm">
+                                <tbody>
+                                <tr v-for="(item, idx) in userConsumptions" :key="idx">
+                                    <td>{{idx + 1}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                            {{c.userName}}, {{c.koekName}}, {{generateDate(c.date)}}
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -112,6 +133,12 @@
     export default {
         name: "home-page",
         components: {KoekCard},
+        mounted() {
+            let self = this;
+            window.setInterval(function () {
+                self.switchStatistics();
+            }, 5000);
+        },
         firestore() {
             return {
                 users: db.collection('users').where('visible', '==', true).orderBy('name'),
@@ -132,6 +159,7 @@
                 STATE_SUCCESS: 'success',
                 STATE_FAILED: 'failed',
                 timerHandle: -1,
+                showRecent: false,
             }
         },
         computed: {
@@ -150,9 +178,6 @@
             selectedKoekName() {
                 if (this.selectedKoek === null) return "";
                 return this.selectedKoek.name;
-            },
-            totalCalories() {
-                return 0;
             },
             ...mapState(['totalConsumptions', 'totalCalories', 'userConsumptions', 'userCalories'])
         },
@@ -225,6 +250,10 @@
                 let date = firestoreDate.toDate();
                 return date.toLocaleDateString('nl-NL', {weekday: 'short'});
             },
+            switchStatistics() {
+                this.showRecent = !this.showRecent;
+            }
+
         }
     }
 </script>
