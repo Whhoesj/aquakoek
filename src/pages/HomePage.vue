@@ -75,7 +75,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                            {{c.koekName}}
+                            {{c.koekName}}, {{generateDate(c.date)}}
                         </li>
                     </ul>
                 </div>
@@ -90,7 +90,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li v-for="(c, idx) in consumptions" :key="idx" class="list-group-item">
-                            {{c.userName}}, {{c.koekName}}
+                            {{c.userName}}, {{c.koekName}}, {{generateDate(c.date)}}
                         </li>
                     </ul>
                 </div>
@@ -220,7 +220,11 @@
                 this.timerHandle = window.setTimeout(() => {
                     this.cancelAll();
                 }, (short === true) ? 3000 : 10000);
-            }
+            },
+            generateDate(firestoreDate) {
+                let date = firestoreDate.toDate();
+                return date.toLocaleDateString('nl-NL', {weekday: 'short'});
+            },
         }
     }
 </script>
