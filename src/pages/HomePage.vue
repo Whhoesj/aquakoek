@@ -219,7 +219,7 @@
                 window.clearTimeout(this.timerHandle);
                 this.timerHandle = window.setTimeout(() => {
                     this.cancelAll();
-                }, (short === true) ? 3000 : 10000);
+                }, (short === true) ? 3000 : 30000);
             },
             generateDate(firestoreDate) {
                 let date = firestoreDate.toDate();
