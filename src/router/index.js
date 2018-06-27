@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import HomePage from '../pages/HomePage.vue';
-import UserPage from '../pages/UserPage.vue';
 import LoginPage from '../pages/LoginPage.vue';
 import ErrorPage from '../pages/ErrorPage.vue';
 
@@ -13,11 +12,6 @@ export default new Router({
             path: '/',
             name: 'home',
             component: HomePage
-        },
-        {
-            path: '/users/:userId',
-            name: 'user',
-            component: UserPage
         },
         {
             path: '/login',

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <!--<nav-header></nav-header>-->
+        <eaten-modal></eaten-modal>
         <div class="container-fluid">
             <div v-if="!signedIn" class="row">
                 <div class="col">
@@ -17,9 +17,11 @@
 <script>
     import NavHeader from "./components/NavHeader.vue";
     import {mapState} from 'vuex';
+    import EatenModal from "./components/modals/EatenModal.vue";
 
     export default {
         components: {
+            EatenModal,
             NavHeader
         },
         name: "app",

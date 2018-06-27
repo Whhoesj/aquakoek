@@ -10,10 +10,10 @@ const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     state: {
         signedIn: false,
-        totalConsumptions: 0,
-        totalCalories: 0,
-        userConsumptions: [],
-        userCalories: [],
+        countConsumptions: 0,
+        countCalories: 0,
+        ranksCountTotal: [],
+        ranksCaloriesTotal: [],
     },
     mutations: {
         signOut(state) {
@@ -23,10 +23,10 @@ const store = new Vuex.Store({
             state.signedIn = true;
         },
         updateStats(state, payload) {
-            state.totalConsumptions = payload.total;
-            state.totalCalories = payload.calories;
-            state.userConsumptions = payload.userConsumptions;
-            state.userCalories = payload.userCalories;
+            state.countConsumptions = payload.total;
+            state.countCalories = payload.calories;
+            state.ranksCountTotal = payload.userConsumptions;
+            state.ranksCaloriesTotal = payload.userCalories;
         },
     },
     getters: {},

@@ -16,3 +16,7 @@ db.settings({
 export function getTimestamp() {
     return Firebase.firestore.FieldValue.serverTimestamp();
 }
+
+export function timestampToDay(firestoreTimestamp) {
+    return firestoreTimestamp.toDate().toLocaleDateString('nl-NL', {weekday: 'short'});
+}

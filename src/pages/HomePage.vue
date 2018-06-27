@@ -35,13 +35,6 @@
                 <button v-if="selectedUser !== null || selectedKoek !== null" @click="cancelAll()" type="button"
                         class="btn btn-danger btn-block mb-4">Annuleren
                 </button>
-                <div @click="test()" v-if="selectedUser === null || selectedKoek === null"
-                     class="card text-center mb-3">
-                    <div class="card-body">
-                        <h4 v-if="selectedUser === null" class="card-title">Tik op je foto</h4>
-                        <h4 v-if="selectedUser !== null" class="card-title">Tik op een koek</h4>
-                    </div>
-                </div>
                 <div v-if="selectedUser !== null && selectedKoek !== null"
                      class="card text-center mb-3 consumption-card">
                     <div class="card-body">
@@ -75,55 +68,23 @@
                         <table class="table table-sm">
                             <tbody>
                             <tr v-for="(c, idx) in consumptions" :key="idx">
-                                <td>{{generateDate(c.date)}}</td>
+                                <td>{{callTimestampToDay(c.date)}}</td>
                                 <td>{{c.koekName}}</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div v-if="selectedUser === null" class="card mb-3">
-                    <div class="card-body">
-                        <h4 class="card-title">Statistieken</h4>
-                        <p class="card-text">
-                            Totaal gegeten: {{totalConsumptions}}<br/>
-                            Totaal calorieën: {{totalCalories}} kcal
-                        </p>
-                        <div v-if="showRecent">
-                            <h4 class="card-title">Recent gegeten</h4>
-                            <table class="table table-sm">
-                                <tbody>
-                                <tr v-for="(c, idx) in consumptions" :key="idx">
-                                    <td>{{generateDate(c.date)}}</td>
-                                    <td>{{c.userName}}</td>
-                                    <td>{{c.koekName}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div v-else>
-                            <h4 class="card-title">Meest gegeten</h4>
-                            <table class="table table-sm">
-                                <tbody>
-                                <tr v-for="(item, idx) in userConsumptions" :key="idx">
-                                    <td>{{idx + 1}}</td>
-                                    <td>{{item.name}}</td>
-                                    <td>{{item.count}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <statistics-card-small v-if="selectedUser === null"></statistics-card-small>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import KoekCard from "../components/KoekCard.vue";
-    import {db, getTimestamp} from '../firebase';
-    import {mapState} from 'vuex';
+    import {db, getTimestamp, timestampToDay} from '../firebase';
+    import StatisticsCardSmall from "../components/StatisticsCardSmall.vue";
+    import EventBus from '../events';
 
     const STATE_IDLE = 'idle';
     const STATE_BUSY = 'busy';
@@ -132,13 +93,7 @@
 
     export default {
         name: "home-page",
-        components: {KoekCard},
-        mounted() {
-            let self = this;
-            window.setInterval(function () {
-                self.switchStatistics();
-            }, 5000);
-        },
+        components: {StatisticsCardSmall},
         firestore() {
             return {
                 users: db.collection('users').where('visible', '==', true).orderBy('name'),
@@ -159,7 +114,6 @@
                 STATE_SUCCESS: 'success',
                 STATE_FAILED: 'failed',
                 timerHandle: -1,
-                showRecent: false,
             }
         },
         computed: {
@@ -179,7 +133,6 @@
                 if (this.selectedKoek === null) return "";
                 return this.selectedKoek.name;
             },
-            ...mapState(['totalConsumptions', 'totalCalories', 'userConsumptions', 'userCalories'])
         },
         methods: {
             selectUser(user) {
@@ -203,12 +156,6 @@
                 this.selectedKoek = null;
                 this.selectedUser = null;
                 this.consumeState = STATE_IDLE;
-                this.$bind('consumptions',
-                    db.collection('consumptions')
-                        .where('paid', '==', false)
-                        .orderBy('date', 'desc')
-                        .limit(10)
-                )
             },
             consumeKoek() {
                 if (this.selectedKoek === null || this.selectedUser === null) {
@@ -232,6 +179,7 @@
                     .then(ref => {
                         console.log("Consumption written");
                         this.consumeState = STATE_SUCCESS;
+                        EventBus.$emit('showeaten', newConsumption.koekName);
                         this.setTimer(true);
                     })
                     .catch(error => {
@@ -246,12 +194,8 @@
                     this.cancelAll();
                 }, (short === true) ? 3000 : 30000);
             },
-            generateDate(firestoreDate) {
-                let date = firestoreDate.toDate();
-                return date.toLocaleDateString('nl-NL', {weekday: 'short'});
-            },
-            switchStatistics() {
-                this.showRecent = !this.showRecent;
+            callTimestampToDay(timestamp) {
+                return timestampToDay(timestamp);
             }
 
         }
