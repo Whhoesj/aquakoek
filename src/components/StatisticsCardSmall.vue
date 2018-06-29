@@ -12,10 +12,8 @@
                 </div>
                 <div class="col text-center align-items-center">
                     <h5 v-if="mode === MODE_RECENT" class="card-title">Recent gegeten</h5>
-                    <h5 v-if="mode === MODE_RANK_TOTAL_COUNT" class="card-title">Totaal</h5>
-                    <h5 v-if="mode === MODE_RANK_WEEK_COUNT" class="card-title">Totaal week</h5>
-                    <h5 v-if="mode === MODE_RANK_TOTAL_CALORIES" class="card-title">Calorieën totaal</h5>
-                    <h5 v-if="mode === MODE_RANK_WEEK_CALORIES" class="card-title">Calorieën week</h5>
+                    <h5 v-if="mode === MODE_RANK_TOTAL" class="card-title">Totaal gegeten</h5>
+                    <h5 v-if="mode === MODE_RANK_WEEK" class="card-title">Totaal week</h5>
                 </div>
                 <div class="col-auto">
                     <button @click="next" type="button" class="btn btn-sm btn-outline-secondary">&rarr;</button>
@@ -30,38 +28,22 @@
                 </tr>
                 </tbody>
             </table>
-            <table v-if="mode === MODE_RANK_TOTAL_COUNT" class="table table-sm">
+            <table v-if="mode === MODE_RANK_TOTAL" class="table table-sm">
                 <tbody>
-                <tr v-for="(item, idx) in statsTotal.ranksCount" :key="idx">
+                <tr v-for="(item, idx) in statsTotal.ranks" :key="idx">
                     <td>{{idx + 1}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.count}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <table v-if="mode === MODE_RANK_WEEK_COUNT" class="table table-sm">
-                <tbody>
-                <tr v-for="(item, idx) in statsWeek.ranksCount" :key="idx">
-                    <td>{{idx + 1}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.count}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <table v-if="mode === MODE_RANK_TOTAL_CALORIES" class="table table-sm">
-                <tbody>
-                <tr v-for="(item, idx) in statsTotal.ranksCalories" :key="idx">
-                    <td>{{idx + 1}}</td>
-                    <td>{{item.name}}</td>
                     <td>{{item.calories}} kcal</td>
                 </tr>
                 </tbody>
             </table>
-            <table v-if="mode === MODE_RANK_WEEK_CALORIES" class="table table-sm">
+            <table v-if="mode === MODE_RANK_WEEK" class="table table-sm">
                 <tbody>
-                <tr v-for="(item, idx) in statsWeek.ranksCalories" :key="idx">
+                <tr v-for="(item, idx) in statsWeek.ranks" :key="idx">
                     <td>{{idx + 1}}</td>
                     <td>{{item.name}}</td>
+                    <td>{{item.count}}</td>
                     <td>{{item.calories}} kcal</td>
                 </tr>
                 </tbody>
@@ -86,10 +68,8 @@
                 recentConsumptions: [],
                 mode: 0,
                 MODE_RECENT: 0,
-                MODE_RANK_WEEK_COUNT: 1,
-                MODE_RANK_TOTAL_COUNT: 2,
-                MODE_RANK_WEEK_CALORIES: 3,
-                MODE_RANK_TOTAL_CALORIES: 4,
+                MODE_RANK_TOTAL: 1,
+                MODE_RANK_WEEK: 2,
             }
         },
         computed: mapState(['statsTotal', 'statsWeek']),
@@ -99,11 +79,11 @@
             },
             next() {
                 this.mode++;
-                if (this.mode > 4) this.mode = 0;
+                if (this.mode > 2) this.mode = 0;
             },
             previous() {
                 this.mode--;
-                if (this.mode < 0) this.mode = 4;
+                if (this.mode < 0) this.mode = 2;
             },
             test() {
             },

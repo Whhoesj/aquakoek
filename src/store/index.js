@@ -13,14 +13,12 @@ const store = new Vuex.Store({
         statsTotal: {
             count: 0,
             calories: 0,
-            ranksCount: [],
-            ranksCalories: [],
+            ranks: [],
         },
         statsWeek: {
             count: 0,
             calories: 0,
-            ranksCount: [],
-            ranksCalories: [],
+            ranks: [],
         }
     },
     mutations: {
@@ -33,14 +31,12 @@ const store = new Vuex.Store({
         updateStatsTotal(state, payload) {
             state.statsTotal.count = payload.count;
             state.statsTotal.calories = payload.calories;
-            state.statsTotal.ranksCount = payload.ranksCount;
-            state.statsTotal.ranksCalories = payload.ranksCalories;
+            state.statsTotal.ranks = payload.ranks;
         },
         updateStatsWeek(state, payload) {
             state.statsWeek.count = payload.count;
             state.statsWeek.calories = payload.calories;
-            state.statsWeek.ranksCount = payload.ranksCount;
-            state.statsWeek.ranksCalories = payload.ranksCalories; 
+            state.statsWeek.ranks = payload.ranks;
         },
     },
     getters: {},
@@ -88,9 +84,11 @@ function generateRanks(snapshot) {
     const ranksCountArray = [];
     for (let key in ranksCount) {
         if (!ranksCount.hasOwnProperty(key)) continue;
+        if (!ranksCalories.hasOwnProperty(key)) continue;
         ranksCountArray.push({
             name: key,
-            count: ranksCount[key]
+            count: ranksCount[key],
+            calories: ranksCalories[key],
         });
     }
     ranksCountArray.sort((a, b) => {
@@ -99,22 +97,8 @@ function generateRanks(snapshot) {
         return 0;
     });
 
-    const ranksCaloriesArray = [];
-    for (let key in ranksCalories) {
-        if (!ranksCalories.hasOwnProperty(key)) continue;
-        ranksCaloriesArray.push({
-            name: key,
-            calories: ranksCalories[key]
-        });
-    }
-    ranksCaloriesArray.sort((a, b) => {
-        if (a.calories > b.calories) return -1;
-        if (a.calories < b.calories) return 1;
-        return 0;
-    });
-
     console.timeEnd('statistics');
     return {
-        count: count, calories: calories, ranksCount: ranksCountArray, ranksCalories: ranksCaloriesArray
+        count: count, calories: calories, ranks: ranksCountArray
     };
 }
