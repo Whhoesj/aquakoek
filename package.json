@@ -4,7 +4,7 @@
   "description": "Aquakoek",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "serve": "webpack-dev-server --hot --config webpack.dev.js",
+    "serve": "webpack-dev-server --hot --progress --config webpack.dev.js",
     "start": "http-server build"
   },
   "author": "Wouter Habets (wouterhabets@gmail.com)",
