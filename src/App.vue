@@ -51,6 +51,10 @@
                                          supported by Chrome and Opera */
     }
 
+    img {
+        pointer-events: none;
+    }
+
     .container-fluid {
         margin-top: 1em;
     }
