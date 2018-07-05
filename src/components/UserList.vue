@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-row">
-        <div class="card p-2 mb-3 mr-3 user-card" @click="selectUser(user)" v-for="(user, idx) in users"
-             :key="idx" :class="{'bg-primary': selectedUserKey === user.id}">
+        <div class="card p-2 user-card" @click="selectUser(user)" v-for="(user, idx) in users"
+             :key="idx" :class="{'bg-primary': selectedUserKey === user.id, 'ml-4': idx !== 0}">
             <img class="card-img-top user-image" :src="user.image">
         </div>
     </div>

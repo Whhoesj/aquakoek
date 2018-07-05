@@ -5,7 +5,7 @@
                 <user-list @select-user="selectUser" :selected-user-key="selectedUserKey"></user-list>
             </div>
         </div>
-        <div class="row mt-3 ml-2">
+        <div class="row mt-4">
             <div class="col">
                 <koek-list @select-koek="selectKoek" :selected-koek-key="selectedKoekKey"></koek-list>
             </div>
@@ -181,7 +181,7 @@
 
 <style scoped>
     .user-list {
-        height: 20%;
+        /*height: 20%;*/
     }
 
     .consumption-card {

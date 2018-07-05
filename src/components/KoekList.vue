@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex align-content-start flex-wrap">
-        <div class="p-2 card mb-3 mr-4 koek-card" @click="selectKoek(koek)" v-for="(koek, idx) in koeken"
+    <div class="d-flex flex-wrap">
+        <div class="p-2 card koek-card mb-4 mr-4" @click="selectKoek(koek)" v-for="(koek, idx) in koeken"
              :key="idx"
              :class="{'bg-primary': selectedKoekKey === koek.id}">
             <img class="card-img-top img-fluid" :src="koek.thumbnail">
