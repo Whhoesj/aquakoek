@@ -2,34 +2,12 @@
     <div>
         <div class="row user-list">
             <div class="col">
-                <div class="d-flex flex-row">
-                    <div class="card p-2 mb-3 mr-3 user-card" @click="selectUser(user)" v-for="(user, idx) in users"
-                         :key="idx" :class="{'bg-primary': selectedUserKey === user.id}">
-                        <img class="card-img-top user-image" :src="user.image">
-                    </div>
-                </div>
+                <user-list @select-user="selectUser" :selected-user-key="selectedUserKey"></user-list>
             </div>
         </div>
-        <div class="row mt-3 ml-2">
+        <div class="row mt-4">
             <div class="col">
-                <div class="d-flex align-content-start flex-wrap">
-                    <div class="p-2 card mb-3 mr-4 koek-card" @click="selectKoek(koek)" v-for="(koek, idx) in koeken"
-                         :key="idx"
-                         :class="{'bg-primary': selectedKoekKey === koek.id}">
-                        <img class="card-img-top img-fluid" :src="koek.thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title koek-name">{{koek.name}}</h5>
-                            <p class="card-text">{{koek.description}}</p>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    Prijs: €{{koek.price.toFixed(2)}}<br/>
-                                    Calorieën: {{koek.calories}}
-                                </small>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
+                <koek-list @select-koek="selectKoek" :selected-koek-key="selectedKoekKey"></koek-list>
             </div>
             <div class="col-3">
                 <button v-if="selectedUser !== null || selectedKoek !== null" @click="cancelAll()" type="button"
@@ -85,6 +63,8 @@
     import {db, getTimestamp, timestampToDay} from '../firebase';
     import StatisticsCardSmall from "../components/StatisticsCardSmall.vue";
     import EventBus from '../events';
+    import UserList from "../components/UserList.vue";
+    import KoekList from "../components/KoekList.vue";
 
     const STATE_IDLE = 'idle';
     const STATE_BUSY = 'busy';
@@ -93,18 +73,14 @@
 
     export default {
         name: "home-page",
-        components: {StatisticsCardSmall},
+        components: {KoekList, UserList, StatisticsCardSmall},
         firestore() {
             return {
-                users: db.collection('users').where('visible', '==', true).orderBy('name'),
-                koeken: db.collection('koeken').where('visible', '==', true).orderBy('name'),
                 consumptions: db.collection('consumptions').where('paid', '==', false).orderBy('date', 'desc').limit(10),
             }
         },
         data() {
             return {
-                users: [],
-                koeken: [],
                 consumptions: [],
                 selectedUser: null,
                 selectedKoek: null,
@@ -136,6 +112,7 @@
         },
         methods: {
             selectUser(user) {
+                console.log("Received selectasdfasf");
                 this.selectedUser = user;
                 console.log("Rebinding consumptions");
                 this.$bind('consumptions',
@@ -203,29 +180,11 @@
 </script>
 
 <style scoped>
-    img {
-        pointer-events: none;
-    }
-
     .user-list {
-        height: 20%;
-    }
-
-    .user-card {
-        width: 40%;
+        /*height: 20%;*/
     }
 
     .consumption-card {
         height: 16em;
-    }
-
-    .koek-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .koek-card {
-        width: 11em;
     }
 </style>

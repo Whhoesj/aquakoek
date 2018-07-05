@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <eaten-modal></eaten-modal>
-        <div class="container-fluid">
+        <div class="container-fluid mt-3">
             <div v-if="!signedIn" class="row">
                 <div class="col">
                     <div @click="openLoginPage" class="alert alert-danger" role="alert">
@@ -51,7 +51,7 @@
                                          supported by Chrome and Opera */
     }
 
-    .container-fluid {
-        margin-top: 1em;
+    img {
+        pointer-events: none;
     }
 </style>
