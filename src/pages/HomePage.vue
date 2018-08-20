@@ -43,14 +43,17 @@
                             Gegeten koeken: {{consumptions.length}}
                         </p>
                         <h5>Recent gegeten door {{selectedUserName}}</h5>
-                        <table class="table table-sm">
-                            <tbody>
-                            <tr v-for="(c, idx) in consumptions" :key="idx">
-                                <td>{{callTimestampToDay(c.date)}}</td>
-                                <td>{{c.koekName}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="scrollable-table">
+                            <table class="table table-sm">
+                                <tbody>
+                                <tr v-for="(c, idx) in consumptions" :key="idx">
+                                    <td>{{callTimestampToDay(c.date)}}</td>
+                                    <td>{{c.koekName}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
                 <statistics-card-small v-if="selectedUser === null"></statistics-card-small>

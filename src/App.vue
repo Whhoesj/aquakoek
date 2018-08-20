@@ -38,6 +38,7 @@
     body {
         background: linear-gradient(to left top, #216572, #359b8b) no-repeat;
         height: 100vh;
+        max-height: 100vh;
         margin: 0;
         overflow: hidden;
 
@@ -53,5 +54,11 @@
 
     img {
         pointer-events: none;
+    }
+
+    .scrollable-table {
+        width: 100%;
+        max-height: 26em;
+        overflow-y: auto;
     }
 </style>

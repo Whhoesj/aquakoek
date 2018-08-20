@@ -19,35 +19,38 @@
                     <button @click="next" type="button" class="btn btn-sm btn-outline-secondary">&rarr;</button>
                 </div>
             </div>
-            <table v-if="mode === MODE_RECENT" class="table table-sm">
-                <tbody>
-                <tr v-for="(c, idx) in recentConsumptions" :key="idx">
-                    <td>{{callTimestampToDay(c.date)}}</td>
-                    <td>{{c.userName}}</td>
-                    <td>{{c.koekName}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <table v-if="mode === MODE_RANK_TOTAL" class="table table-sm">
-                <tbody>
-                <tr v-for="(item, idx) in statsTotal.ranks" :key="idx">
-                    <td>{{idx + 1}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.calories}} kcal</td>
-                </tr>
-                </tbody>
-            </table>
-            <table v-if="mode === MODE_RANK_WEEK" class="table table-sm">
-                <tbody>
-                <tr v-for="(item, idx) in statsWeek.ranks" :key="idx">
-                    <td>{{idx + 1}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.count}}</td>
-                    <td>{{item.calories}} kcal</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="scrollable-table">
+                <table v-if="mode === MODE_RECENT" class="table table-sm">
+                    <tbody>
+                    <tr v-for="(c, idx) in recentConsumptions" :key="idx">
+                        <td>{{callTimestampToDay(c.date)}}</td>
+                        <td>{{c.userName}}</td>
+                        <td>{{c.koekName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table v-if="mode === MODE_RANK_TOTAL" class="table table-sm">
+                    <tbody>
+                    <tr v-for="(item, idx) in statsTotal.ranks" :key="idx">
+                        <td>{{idx + 1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.count}}</td>
+                        <td>{{item.calories}} kcal</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table v-if="mode === MODE_RANK_WEEK" class="table table-sm">
+                    <tbody>
+                    <tr v-for="(item, idx) in statsWeek.ranks" :key="idx">
+                        <td>{{idx + 1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.count}}</td>
+                        <td>{{item.calories}} kcal</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 </template>
@@ -60,7 +63,7 @@
         name: "StatisticsCardSmall",
         firestore() {
             return {
-                recentConsumptions: db.collection('consumptions').where('paid', '==', false).orderBy('date', 'desc').limit(10),
+                recentConsumptions: db.collection('consumptions').where('paid', '==', false).orderBy('date', 'desc').limit(30),
             }
         },
         data() {
