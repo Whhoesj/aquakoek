@@ -15,6 +15,9 @@
                             Total: € {{stats.priceAll}}<br/>
                             Unpaid: € {{stats.priceUnpaid}}
                         </p>
+                        <p>
+                            <button type="button" class="btn btn-primary" @click="pay()">Pay</button>
+                        </p>
                     </div>
 
                 </div>
@@ -103,7 +106,28 @@
             },
             callTimestampToDay(timestamp) {
                 return timestampToDay(timestamp);
-            }
+            },
+            pay() {
+                db.collection('consumptions')
+                    .where('userId', '==', this.selectedUser.id)
+                    .orderBy('date', 'desc').get().then(data => {
+
+                    let batch = db.batch();
+                    let counter = 0;
+                    data.docs.forEach(c => {
+                        batch.update(c.ref, {"paid": true});
+                        counter++;
+                    });
+
+                    console.log(`Queued ${counter} consumptions in transaction.`);
+                    batch.commit().then(() => {
+                        console.log(`Transaction for ${this.selectedUserName} completed.`);
+                    }).catch(e => {
+                        throw e;
+                    });
+                });
+
+            },
         }
     }
 </script>
