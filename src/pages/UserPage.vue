@@ -15,11 +15,7 @@
                             Total: € {{stats.priceAll}}<br/>
                             Unpaid: € {{stats.priceUnpaid}}
                         </p>
-                        <p>
-                            <button type="button" class="btn btn-primary" @click="pay()">Pay</button>
-                        </p>
                     </div>
-
                 </div>
             </div>
             <div class="col">
