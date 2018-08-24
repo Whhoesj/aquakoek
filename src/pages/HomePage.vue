@@ -121,7 +121,6 @@
                 this.$bind('consumptions',
                     db.collection('consumptions')
                         .where('userId', '==', user.id)
-                        .where('paid', '==', false)
                         .orderBy('date', 'desc')
                 );
                 this.setTimer();

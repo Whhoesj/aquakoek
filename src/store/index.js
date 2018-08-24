@@ -52,12 +52,12 @@ Firebase.auth().onAuthStateChanged(user => {
     }
 });
 
-const refTotal = db.collection('consumptions').where('paid', '==', false).orderBy('date', 'desc')
+const refTotal = db.collection('consumptions').orderBy('date', 'desc')
     .onSnapshot(snapshot => {
         store.commit('updateStatsTotal', generateRanks(snapshot));
     });
 
-const refWeek = db.collection('consumptions').where('paid', '==', false).where('date', '>', new Date('2018-07-02')).orderBy('date', 'desc')
+const refWeek = db.collection('consumptions').where('date', '>', new Date('2018-08-27')).orderBy('date', 'desc')
     .onSnapshot(snapshot => {
         store.commit('updateStatsWeek', generateRanks(snapshot));
     });

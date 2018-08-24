@@ -63,7 +63,7 @@
         name: "StatisticsCardSmall",
         firestore() {
             return {
-                recentConsumptions: db.collection('consumptions').where('paid', '==', false).orderBy('date', 'desc').limit(30),
+                recentConsumptions: db.collection('consumptions').orderBy('date', 'desc').limit(30),
             }
         },
         data() {
