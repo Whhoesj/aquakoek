@@ -57,7 +57,7 @@ const refTotal = db.collection('consumptions').orderBy('date', 'desc')
         store.commit('updateStatsTotal', generateRanks(snapshot));
     });
 
-const refWeek = db.collection('consumptions').where('date', '>', new Date('2018-08-27')).orderBy('date', 'desc')
+const refWeek = db.collection('consumptions').where('date', '>', new Date('2018-09-02')).orderBy('date', 'desc')
     .onSnapshot(snapshot => {
         store.commit('updateStatsWeek', generateRanks(snapshot));
     });
