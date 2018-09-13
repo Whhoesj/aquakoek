@@ -19,38 +19,37 @@
                     <button @click="next" type="button" class="btn btn-sm btn-outline-secondary">&rarr;</button>
                 </div>
             </div>
-            <div class="scrollable-table">
-                <table v-if="mode === MODE_RECENT" class="table table-sm">
-                    <tbody>
-                    <tr v-for="(c, idx) in recentConsumptions" :key="idx">
-                        <td>{{callTimestampToDay(c.date)}}</td>
-                        <td>{{c.userName}}</td>
-                        <td>{{c.koekName}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table v-if="mode === MODE_RANK_TOTAL" class="table table-sm">
-                    <tbody>
-                    <tr v-for="(item, idx) in statsTotal.ranks" :key="idx">
-                        <td>{{idx + 1}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.count}}</td>
-                        <td>{{item.calories}} kcal</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table v-if="mode === MODE_RANK_WEEK" class="table table-sm">
-                    <tbody>
-                    <tr v-for="(item, idx) in statsWeek.ranks" :key="idx">
-                        <td>{{idx + 1}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.count}}</td>
-                        <td>{{item.calories}} kcal</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
+        </div>
+        <div class="scrollable-table">
+            <table v-if="mode === MODE_RECENT" class="table table-sm">
+                <tbody>
+                <tr v-for="(c, idx) in recentConsumptions" :key="idx">
+                    <td class="dateCell">{{callTimestampToDay(c.date)}}</td>
+                    <td>{{c.userName}}</td>
+                    <td>{{c.koekName}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table v-if="mode === MODE_RANK_TOTAL" class="table table-sm">
+                <tbody>
+                <tr v-for="(item, idx) in statsTotal.ranks" :key="idx">
+                    <td>{{idx + 1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.count}}</td>
+                    <td>{{item.calories}} kcal</td>
+                </tr>
+                </tbody>
+            </table>
+            <table v-if="mode === MODE_RANK_WEEK" class="table table-sm">
+                <tbody>
+                <tr v-for="(item, idx) in statsWeek.ranks" :key="idx">
+                    <td>{{idx + 1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.count}}</td>
+                    <td>{{item.calories}} kcal</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -95,5 +94,7 @@
 </script>
 
 <style scoped>
-
+    .dateCell {
+        text-align: right;
+    }
 </style>
