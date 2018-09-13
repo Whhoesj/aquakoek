@@ -20,9 +20,9 @@
                         <h5 class="card-title"><strong>{{selectedKoekName}}</strong></h5>
                         <p class="card-text">voor</p>
                         <h5 class="card-title mb-3"><strong>{{selectedUserName}}</strong></h5>
-                        <button v-if="consumeState === STATE_IDLE" @click="consumeKoek()"
-                                type="button" class="btn btn-primary btn-block btn-lg">Eet
-                            koek
+                        <button v-if="consumeState === STATE_IDLE" @click="consumeKoek()" type="button"
+                                class="btn btn-primary btn-block btn-lg">
+                            Eet {{selectedKoekType}}
                         </button>
                         <div v-if="consumeState === STATE_BUSY" class="alert alert-info align-content-center"
                              role="alert">
@@ -111,6 +111,10 @@
             selectedKoekName() {
                 if (this.selectedKoek === null) return "";
                 return this.selectedKoek.name;
+            },
+            selectedKoekType() {
+                if (this.selectedKoek === null) return "";
+                return this.selectedKoek.type;
             },
         },
         methods: {
