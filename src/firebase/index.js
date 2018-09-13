@@ -18,5 +18,9 @@ export function getTimestamp() {
 }
 
 export function timestampToDay(firestoreTimestamp) {
-    return firestoreTimestamp.toDate().toLocaleDateString('nl-NL', {weekday: 'short'});
+    return firestoreTimestamp.toDate().toLocaleDateString('nl-NL', {
+        weekday: 'short',
+        day: '2-digit',
+        month: '2-digit'
+    });
 }
