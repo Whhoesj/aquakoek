@@ -17,9 +17,7 @@ import store from './store';
 // }
 
 new Vue({
-    el: "#app",
-    template: '<app></app>',
-    components: {App},
     router,
-    store
-});
+    store,
+    render: function (h) {return h(App)}
+}).$mount('#app');
